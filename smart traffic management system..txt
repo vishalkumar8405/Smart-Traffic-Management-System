@@ -1,0 +1,175 @@
+#include <iostream>
+
+#include<fstream>
+using namespace std;
+
+class vechiles
+{
+public:
+    int welcome()
+    {
+        int choice;
+        cout<<"\n\n\n\n";
+        cout<<"                   ///////////////////////////////////////////////\n";
+        cout<<"         ****      |        SMART TRAFFIC MANAGEMENT SYSTEM        |      ****"<<endl;
+        cout<<"                   ///////////////////////////////////////////////\n\n";
+        cout<<"                              "<<endl;
+        cout<<"\n\n                                           "<<endl;
+        cout<<"                         1. Search car details."<<endl;
+        cout<<"                         2. Add car details."<<endl;
+        cout<<"                         3. Show the Database."<<endl;
+        cout<<"                         4. Delete car details."<<endl;
+        cout<<"                         5. Exit \n\n";
+        cout<<endl<<"                Enter your Choice: ";
+
+        cin>>choice;
+        if (choice > 0 && choice <=5 )
+        {
+        switch(choice)
+        {
+            case 1:
+                searchData();
+                break;
+
+            case 2:
+                addCar();
+                break;
+
+            case 3:
+                showFile();
+                break;
+
+            case 4:
+                deleteCar();
+                break;
+			
+            case 5:
+                exit;
+                break;
+				 }
+        } else{
+    cout<<"Enter Valid option !!"<<endl<<endl;
+    welcome();
+    }
+    }
+
+    int showFile()
+    {
+    string getcontent;
+    ifstream openfile ("vishalProject.txt");
+    if(openfile.is_open())
+    {
+    while(! openfile.eof())
+	{
+     openfile >> getcontent;
+     cout << getcontent << endl;
+     }
+     }
+     welcome();
+
+    }
+
+    int addCar()
+    {
+        fstream fio;
+        string line;
+        cout<<"                      SMART TRAFFIC MANAGEMENT SYSTEM "<<endl<<endl;
+        cout<<"Enter Registration number of the Vehicle in the first line "<<endl<<endl;
+        cout<<"Enter name of the Vehicle in the second line "<<endl<<endl;
+        cout<<"Enter Name of the owner in the third line "<<endl<<endl<<endl;
+        cout<<"Enter the mobile number in fourth line "<<endl<<endl<<endl;
+        cout<<"Enter the vehicle color in fifth line "<<endl<<endl<<endl;
+		cout<<endl<<"Enter '*' to Exit "<<endl<<endl;
+
+        fio.open("vishalProject.txt", ios::app | ios::out | ios::in);
+
+        while (fio) {
+            getline(cin, line);
+
+            if (line == "*")
+                break;
+
+            fio << line << endl << endl;
+        }
+        cout<<"Data Entered successfully !!"<<endl;
+        welcome();
+
+    }
+
+    int searchData()
+    {
+
+        string path = "vishalProject.txt";
+        ifstream file( path.c_str() );
+
+        if( file.is_open() )
+        {
+            cout << "                    Welcome to Registration of Vehicles\n" ;
+
+            cout <<endl<< "Write the Registration number or Name of the owner of the vehicle you want to searching for\n" ;
+            string word ;
+            cin >> word ;
+            int countwords = 0 ;
+            string candidate ;
+            while( file >> candidate ) 
+            {
+                if( word == candidate )
+                    ++countwords ;
+            }
+            if (countwords > 0){
+                cout << "The registration number " << word << "' has been found in our records."<<endl ;
+
+                int choice;
+                cout<<endl<<"Enter 1 to go to home screen and enter 2 for again entering the registration number ";
+                cin>>choice;
+                if (choice ==1)
+                    welcome();
+                else
+                    searchData();
+            }
+            else{
+                cout<<"Registration number does not found !!";
+                int choice;
+                cout<<endl<<"Enter 1 to go to home screen and enter 2 for again entering the registration number ";
+                cin>>choice;
+                if (choice ==1)
+                    welcome();
+                else
+                    searchData();
+            }
+        }
+        welcome();
+    }
+
+    int deleteCar()
+    {
+        string deleteline;
+
+        string line;
+        ifstream in("vishalProject.txt");
+        if (!in.is_open()) {
+            cout << "Input file failed to open\n"<<endl;
+            welcome();
+        }
+        ofstream out("outfile.txt");
+        cout << "Please Select the Vessel you would like to remove" << endl;
+        cin >> deleteline;
+        while (getline(in, line)) {
+            if (line != deleteline)
+                out << line << endl;
+        }
+        in.close();
+        out.close();
+        remove("vishalProject.txt");
+        rename("outfile.txt", "vishalProject.txt");
+        cout << "\nChanges has Successfully been made...... Data Saved\n" << endl;
+        welcome();
+    }
+};
+int main()
+{
+
+    vechiles obj;
+    obj.welcome();
+
+}
